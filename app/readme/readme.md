@@ -16,14 +16,14 @@ The program wil include, but is not limmited to, the following features:
 
 
 The app will consist of 6 activities as seen bellow:
-![title](/images/screens_front.jpg)
-![title](/images/screens_back.jpg)
+![title](/app/readme/images/screens_front.jpg)
+![title](/app/readme/images/screens_back.jpg)
 
 The screens will have the following options:
-![title](/images/code_front.jpg)
-![title](/images/code_back.jpg)
+![title](/app/readme/images/code_front.jpg)
+![title](/app/readme/images/code_back.jpg)
 
 To implement this the following classes and functions will be needed:
-![title](/images/classes.jpg)
-![title](/images/functions.jpg)
+![title](/app/readme/images/classes.jpg)
+![title](/app/readme/images/functions.jpg)
 
