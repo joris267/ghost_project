@@ -15,6 +15,6 @@ The program wil include, but is not limmited to, the following features:
 
 
 The app will consist of 4 activities as seen bellow with 2 extra dropdown/confirmation sketches.:
-![title](/app/readme/images/flow_front.jpg=400x)
-![title](/app/readme/images/flow_back.jpg=400x)
+![title](/app/readme/images/flow_front.jpg)
+![title](/app/readme/images/flow_back.jpg)
 
