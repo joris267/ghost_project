@@ -6,7 +6,7 @@ Joris Schefold (10421092)
 
 If there was no previous game to resume the game will load in the Start screen.
 Initially button A will be invisible.
-![title](/app/readme/images/start_screen.jpg=400x)
+![title](/app/readme/images/start_screen.jpg)
 In buttons B the players will have to enter their names. 
 They can also use an drop down menu to select from previously chosen names.
 One's they both have entered a name button A will fade in and can be pressed to start a new game.
