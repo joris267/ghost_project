@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Go back"
+        android:onClick="BackToMain"
+        android:layout_weight="1" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="confirm input"
+        android:onClick="confirm_input"
+        android:id="@+id/confirm_restart"
+        android:layout_weight="1" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:id="@+id/progressBar"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name p1"
+                android:id="@+id/p1_name_view"/>
+
+            <TextView
+                android:layout_toRightOf="@id/p1_name_view"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/p1_score_view"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name p2"
+                android:id="@+id/p2_name_view"/>
+
+            <TextView
+                android:layout_toRightOf="@id/p2_name_view"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/p2_score_view"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:id="@+id/player_turn_view"
+        android:layout_marginTop="20sp"
+        android:text="Player turn goes hoere"
+        android:layout_weight="1" />
+
+    <RelativeLayout
+        android:layout_marginTop="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The current word is:"
+            android:id="@+id/current_word_anouncer"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_below="@+id/current_word_anouncer"
+            style="@style/word_text_gamescreen"
+            android:id="@+id/ghost_word_textview"
+            android:text=""/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="3dp"
+            android:text="X"
+            android:maxLength="1"
+            style="@style/word_text_gamescreen"
+            android:id="@+id/player_letter_input_field"
+            android:layout_toRightOf="@+id/ghost_word_textview"
+            android:layout_below="@+id/current_word_anouncer"/>
+    </RelativeLayout>
+</LinearLayout>
