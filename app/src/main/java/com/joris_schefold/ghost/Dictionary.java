@@ -3,18 +3,21 @@ package com.joris_schefold.ghost;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by joris on 4/15/2015.
  */
 public class Dictionary{
 //  This must be changed for a function to load the dictionary, ALL LOWERCASE
-    private ArrayList<String> active_dictionary = new ArrayList<>(
-            Arrays.asList("aap","appel","annanas","aarde","aardsteen","aardachtig",
-                    "aanbeeld","anker","Anders","achtig"));
+    private Set<String> active_dictionary = new HashSet<String>(Arrays.asList("aap",
+        "appel","annanas","aarde","aardsteen","aardachtig",
+        "aanbeeld","anker","Anders","achtig"));
 
-    private List<String> filtered_list = active_dictionary;
+    private Set<String> filtered_list = active_dictionary;
 
 
     void filter(String input){
@@ -22,15 +25,31 @@ public class Dictionary{
          * Filters the dictionary. Must be called every time a new letter is guessed.
          * Param, letter guessed.
          */
-        List<String> new_filtered_list = new ArrayList<String>();
+//
+//        for (String word : filtered_list){
+//            if (!word.startsWith(input)){
+//                filtered_list.remove(word);
+//            }
+//        }
 
-        for(int i =0; i < filtered_list.size(); i++){
-            String word = filtered_list.get(i);
-            if (word.startsWith(input)){
-                new_filtered_list.add(word);
+
+        for (Iterator<String> iter = filtered_list.iterator(); iter.hasNext();) {
+            String word = iter.next();
+            if (!word.startsWith(input)) {
+                iter.remove();
             }
         }
-        filtered_list = new_filtered_list;
+
+//
+//        List<String> new_filtered_list = new ArrayList<String>();
+//
+//        for(int i =0; i < filtered_list.size(); i++){
+//            String word = filtered_list.get(i);
+//            if (word.startsWith(input)){
+//                new_filtered_list.add(word);
+//            }
+//        }
+//        filtered_list = new_filtered_list;
 
     }
 
@@ -53,7 +72,11 @@ public class Dictionary{
     String result(){
         /*Returns the last remaining word if there is only one word left, null otherwise.
         * Function is never used but was required for some reason.*/
-        if (this.count_remaining_words() == 1) return filtered_list.get(0);
+        if (this.count_remaining_words() == 1) {
+            Iterator iter = filtered_list.iterator();
+            String last_word = (String)iter.next();
+            return last_word;
+        }
         return null;
     }
 
