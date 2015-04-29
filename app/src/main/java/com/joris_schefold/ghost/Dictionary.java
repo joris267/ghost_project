@@ -29,21 +29,20 @@ public class Dictionary{
     private Activity dictonary_activity;
 
 
-    public Dictionary(Activity activ, String file){
+    public Dictionary(Activity activ, int fileId){
         dictonary_activity = activ;
-        active_dictionary = loadDictonary(file);
+        active_dictionary = loadDictonary(fileId);
         filtered_list = (HashSet<String>)active_dictionary.clone();
         filtered_list = deepCloneHashSet(active_dictionary);
 //        filtered_list = new HashSet<String>(active_dictionary);
     }
 
-    HashSet<String> loadDictonary(String file){
+    HashSet<String> loadDictonary(int fileId){
         HashSet<String> dictionary = new HashSet<String>();
         BufferedReader buffreader;
         String line;
-        File file2 = dictonary_activity.getFileStreamPath("dutch.txt");
         try {
-            InputStream is = dictonary_activity.getResources().openRawResource(R.raw.dutch);
+            InputStream is = dictonary_activity.getResources().openRawResource(fileId);
             buffreader = new BufferedReader(new InputStreamReader(is));
             while ((line = buffreader.readLine()) != null) {
                 if (isAlpha(line)) {
