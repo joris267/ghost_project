@@ -60,8 +60,8 @@ public class Game {
         /*Checks if the input (a letter) is valid. adds loss of it isn't and changes active player
         * if it is.*/
         word = word + player_input;
-        System.out.println(word +" " + player_input);
         game_dictonary.filter(word);
+        System.out.println("How many word are there ramining:   " + Integer.toString(game_dictonary.count_remaining_words()));
         if ((game_dictonary.count_remaining_words() == 0) || (game_dictonary.formed_word(word) && (word.length() > 3))) { // the player either formed a word or no word can be formed
             add_loss(active_player);
             return false;

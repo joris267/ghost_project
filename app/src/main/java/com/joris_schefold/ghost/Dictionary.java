@@ -1,23 +1,72 @@
 package com.joris_schefold.ghost;
 
 
-import java.util.ArrayList;
+import android.app.Activity;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 
 /**
  * Created by joris on 4/15/2015.
  */
 public class Dictionary{
-//  This must be changed for a function to load the dictionary, ALL LOWERCASE
-    private Set<String> active_dictionary = new HashSet<String>(Arrays.asList("aap",
-        "appel","annanas","aarde","aardsteen","aardachtig",
-        "aanbeeld","anker","Anders","achtig"));
+//    private HashSet<String> active_dictionary = new HashSet<String>(Arrays.asList("aap","appel","annanas","aarde","aardsteen","aardachtig","aanbeeld","anker","Anders","achtig"));
+    private HashSet<String> active_dictionary = new HashSet<String>();
+    private HashSet<String> filtered_list = new HashSet<String>();
+    private Activity dictonary_activity;
 
-    private Set<String> filtered_list = active_dictionary;
+
+    public Dictionary(Activity activ, String file){
+        dictonary_activity = activ;
+        active_dictionary = loadDictonary(file);
+        filtered_list = (HashSet<String>)active_dictionary.clone();
+        filtered_list = deepCloneHashSet(active_dictionary);
+//        filtered_list = new HashSet<String>(active_dictionary);
+    }
+
+    HashSet<String> loadDictonary(String file){
+        HashSet<String> dictionary = new HashSet<String>();
+        BufferedReader buffreader;
+        String line;
+        File file2 = dictonary_activity.getFileStreamPath("dutch.txt");
+        try {
+            InputStream is = dictonary_activity.getResources().openRawResource(R.raw.dutch);
+            buffreader = new BufferedReader(new InputStreamReader(is));
+            while ((line = buffreader.readLine()) != null) {
+                if (isAlpha(line)) {
+                    dictionary.add(line.toLowerCase());
+                }
+            }
+            buffreader.close();
+        }catch (IOException e){
+            System.out.println(e + "<============");
+        }
+
+        return dictionary;
+    }
+
+    public boolean isAlpha(String name) {
+        char[] chars = name.toCharArray();
+        for (char c : chars) {
+            if(!Character.isLetter(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
     void filter(String input){
@@ -25,32 +74,12 @@ public class Dictionary{
          * Filters the dictionary. Must be called every time a new letter is guessed.
          * Param, letter guessed.
          */
-//
-//        for (String word : filtered_list){
-//            if (!word.startsWith(input)){
-//                filtered_list.remove(word);
-//            }
-//        }
-
-
         for (Iterator<String> iter = filtered_list.iterator(); iter.hasNext();) {
             String word = iter.next();
             if (!word.startsWith(input)) {
                 iter.remove();
             }
         }
-
-//
-//        List<String> new_filtered_list = new ArrayList<String>();
-//
-//        for(int i =0; i < filtered_list.size(); i++){
-//            String word = filtered_list.get(i);
-//            if (word.startsWith(input)){
-//                new_filtered_list.add(word);
-//            }
-//        }
-//        filtered_list = new_filtered_list;
-
     }
 
     boolean formed_word(String word){
@@ -69,6 +98,15 @@ public class Dictionary{
     }
 
 
+    public HashSet<String> deepCloneHashSet(HashSet set){
+        HashSet<String> copy = new HashSet<String>(set.size());
+        Iterator<String> iterator = set.iterator();
+        while(iterator.hasNext()){
+            copy.add(iterator.next());
+        }
+        return copy;
+    }
+
     String result(){
         /*Returns the last remaining word if there is only one word left, null otherwise.
         * Function is never used but was required for some reason.*/
@@ -83,6 +121,8 @@ public class Dictionary{
 
     void reset(){
         /*resets the filtered list to its non filtered value (complete dictionary)*/
-        filtered_list = active_dictionary;
+//        HashSet<String> filtered_list = new HashSet<String>(active_dictionary);
+        filtered_list = deepCloneHashSet(active_dictionary);
     }
+
 }

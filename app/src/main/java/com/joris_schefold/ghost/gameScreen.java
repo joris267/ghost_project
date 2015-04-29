@@ -85,7 +85,7 @@ public class gameScreen extends Activity {
         confirm_restart_button.setOnClickListener(confirm_input);
 
 //        Creates a dictionary and start the game.
-        Dictionary dictonary = new Dictionary();
+        Dictionary dictonary = new Dictionary(this, "english");
         game_class = new Game(this, dictonary, p1_name, p2_name);
     }
 

@@ -6,15 +6,47 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 
-public class startup_screen extends Activity {
+public class startup_screen extends Activity implements AdapterView.OnItemSelectedListener {
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+
+        long spinnerId = ((Spinner)parent).getId();
+        if (spinnerId == R.id.spinnerP2){
+            EditText textBox = (EditText)findViewById(R.id.username_input_p2_startupscreen);
+            textBox.setText(parent.getItemAtPosition(pos).toString());
+        }else{
+            EditText textBox = (EditText)findViewById(R.id.username_input_p1_startupscreen);
+            textBox.setText(parent.getItemAtPosition(pos).toString());
+        }
+
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Do nothing
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startup_screen);
+
+
+        String[] prevoriouslyChosenNames = {"", "Jan", "Peter", "John", "Darth Vader", "no one"};
+        Spinner spin1 = (Spinner) findViewById(R.id.spinnerP1);
+        Spinner spin2 = (Spinner) findViewById(R.id.spinnerP2);
+        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, prevoriouslyChosenNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin1.setAdapter(adapter);
+        spin1.setOnItemSelectedListener(this);
+        spin2.setAdapter(adapter);
+        spin2.setOnItemSelectedListener(this);
     }
 
 

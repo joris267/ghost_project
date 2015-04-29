@@ -31,12 +31,21 @@
             android:text="Enter name player 1">
         </TextView>
 
-        <EditText
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="P1"
-            android:id="@+id/username_input_p1_startupscreen">
-        </EditText>
+        <RelativeLayout
+            style="@style/inputfieldContainer"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                style="@style/inputfieldSpinner"
+                android:id="@+id/spinnerP1"/>
+
+            <EditText
+                style="@style/inputfieldEditText"
+                android:id="@+id/username_input_p1_startupscreen"
+                android:text="P1"/>
+
+        </RelativeLayout>
+
     </LinearLayout>
 
 
@@ -53,13 +62,24 @@
             android:text="Enter name player 2">
         </TextView>
 
-        <EditText
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="P2"
-            android:id="@+id/username_input_p2_startupscreen">
-        </EditText>
+        <RelativeLayout
+            style="@style/inputfieldContainer"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                style="@style/inputfieldSpinner"
+                android:id="@+id/spinnerP2"/>
+
+            <EditText
+                style="@style/inputfieldEditText"
+                android:id="@+id/username_input_p2_startupscreen"
+                android:text="P2"/>
+
+        </RelativeLayout>
+
     </LinearLayout>
+
+
 
 
 
