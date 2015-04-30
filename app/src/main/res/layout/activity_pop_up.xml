@@ -7,21 +7,28 @@
     tools:context="com.joris_schefold.ghost.popUp"
     android:background="@color/transparent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerInParent="true"
+        android:padding="15dp"
         android:background="@color/black">
-        <TextView android:text="FOOL, \n you can only enter letters!!!" android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Button
+        <TextView android:text="Error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="I solemnly swear never to do this again"
+            android:id="@+id/errorMsg"/>
+
+        <Button
+            android:paddingTop="5dp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:layout_below="@+id/errorMsg"
+            android:id="@+id/backButton"
             android:onClick="lesson_learned"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

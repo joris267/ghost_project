@@ -1,7 +1,6 @@
 package com.joris_schefold.ghost;
 
 import android.app.Activity;
-import android.content.Context;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -40,15 +39,20 @@ public class Game {
     }
 
 
-    private void add_loss(int i){
+    public boolean checkFinished() {
+        /*Return true if the game has finished*/
+        return p1_score.length() == score_array.length || p2_score.length() == score_array.length;
+    }
+
+    private void addLoss(int i){
         /*Ads a loss to the players score.
-        * i is the players number, 0 for player 1 and 1 for player 2*/
-        if (i == 0){
+        * i is the players number, 0 for player 1 and 1 for player 2
+        * Returns True if the game is finished (one of the players has GHOST)*/
+        if (i == 0) {
             p1_score = p1_score + score_array[p1_score.length()];
             TextView p1_score_view = (TextView) game_activity.findViewById(R.id.p1_score_view);
             p1_score_view.setText(p1_score);
-        }
-        else {
+        } else {
             p2_score = p2_score + score_array[p2_score.length()];
             TextView p2_score_view = (TextView) game_activity.findViewById(R.id.p2_score_view);
             p2_score_view.setText(p2_score);
@@ -56,20 +60,32 @@ public class Game {
     }
 
 
-    boolean valid_guess(String player_input){
+    String formed_word(){
+        return game_dictonary.result();
+    }
+
+
+    int valid_guess(String player_input){
         /*Checks if the input (a letter) is valid. adds loss of it isn't and changes active player
-        * if it is.*/
+        * if it is.
+        * returns 0 if valid guess
+        * returns 1 if no words can be formed
+        * returns 2 if a word of more then 3 char is formed*/
         word = word + player_input;
-        game_dictonary.filter(word);
-        System.out.println("How many word are there ramining:   " + Integer.toString(game_dictonary.count_remaining_words()));
-        if ((game_dictonary.count_remaining_words() == 0) || (game_dictonary.formed_word(word) && (word.length() > 3))) { // the player either formed a word or no word can be formed
-            add_loss(active_player);
-            return false;
+//        System.out.println("How many word are there ramining:   " + Integer.toString(game_dictonary.count_remaining_words()));
+        if (game_dictonary.formed_word(word) && (word.length() > 3)){
+            addLoss(active_player);
+            return 1;
+        }else{game_dictonary.filter(word);}
+
+        if (game_dictonary.count_remaining_words() == 0){
+            addLoss(active_player);
+            return 2;
         }else {
             active_player++;
             active_player = active_player % 2;
             player_turn_view.setText(player_names.get(active_player));
-            return true;
+            return 0;
         }
     }
 
@@ -79,11 +95,18 @@ public class Game {
         return player_names.get(active_player);
     }
 
+    String loser(){
+        /*Returns the name of the player who lost.*/
+        return player_names.get((active_player++)%2);
+    }
+
 
     void next_round() throws Error {
-        /*Throws error if there are more then one words remaining in the dictionary!
+        /*Throws error if there are more then one words remaining in the dictionary and no word has
+        * been formed.
         * if not resets values*/
-        if (game_dictonary.count_remaining_words()>1){throw new Error();}
+        if (!(game_dictonary.count_remaining_words() == 0 || (game_dictonary.formed_word(word) &&
+                (word.length() > 3)))){throw new Error();}
         word = "";
         TextView word_view = (TextView) game_activity.findViewById(R.id.ghost_word_textview);
         word_view.setText("");

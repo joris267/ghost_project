@@ -73,11 +73,6 @@ public class startup_screen extends Activity implements AdapterView.OnItemSelect
     }
 
     public void startGame(View view) {
-        Intent getNameScreenIntent = new Intent(this,
-                gameScreen.class);
-        final int result = 1;
-
-
 //        Get information player 1
         EditText inputfield_p1 = (EditText)
                 findViewById(R.id.username_input_p1_startupscreen);
@@ -88,10 +83,21 @@ public class startup_screen extends Activity implements AdapterView.OnItemSelect
                 findViewById(R.id.username_input_p2_startupscreen);
         String username_p2 = String.valueOf(inputfield_p2.getText());
 
-//        Put the information in the intent.
-        getNameScreenIntent.putExtra("name_p1", username_p1);
-        getNameScreenIntent.putExtra("name_p2", username_p2);
-        startActivityForResult(getNameScreenIntent, result);
+        if (username_p1.length() == 0 || username_p2.length() == 0 ) {
+            Intent popUp = new Intent(getApplicationContext(), com.joris_schefold.ghost.popUp.class);
+            popUp.putExtra("errorMsg", "A player has a name....");
+            popUp.putExtra("button", "Oops, I forgot");
+            startActivity(popUp);
+        }else{
+            Intent getNameScreenIntent = new Intent(this,
+                    gameScreen.class);
+            final int result = 1;
+
+            //Put the information in the intent.
+            getNameScreenIntent.putExtra("name_p1", username_p1);
+            getNameScreenIntent.putExtra("name_p2", username_p2);
+            startActivityForResult(getNameScreenIntent, result);
+        }
     }
 
     @Override

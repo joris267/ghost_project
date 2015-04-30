@@ -2,20 +2,10 @@ package com.joris_schefold.ghost;
 
 
 import android.app.Activity;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Scanner;
-import java.util.Set;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 
@@ -75,10 +65,12 @@ public class Dictionary{
          */
         for (Iterator<String> iter = filtered_list.iterator(); iter.hasNext();) {
             String word = iter.next();
+            System.out.println(word + " " + (!word.startsWith(input)));
             if (!word.startsWith(input)) {
                 iter.remove();
             }
         }
+        System.out.println(filtered_list.size());
     }
 
     boolean formed_word(String word){
@@ -107,8 +99,7 @@ public class Dictionary{
     }
 
     String result(){
-        /*Returns the last remaining word if there is only one word left, null otherwise.
-        * Function is never used but was required for some reason.*/
+        /*Returns the last remaining word if there is only one word left, null otherwise.*/
         if (this.count_remaining_words() == 1) {
             Iterator iter = filtered_list.iterator();
             String last_word = (String)iter.next();
