@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /*Activity that functions as a pop up screen for the game activity.*/
-public class popUp extends Activity {
+public class PopUpScreeh extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState){

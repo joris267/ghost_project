@@ -3,20 +3,36 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".startup_screen">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.joris_schefold.ghost.SettingsScreen">
 
 
-    <LinearLayout
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:id="@+id/start_button">
-        <Button
+        android:id="@+id/goBackButton"
+        android:onClick="goBack"
+        android:text="Back"
+        android:layout_below="@+id/goBackButton"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerContainer"
+        android:layout_below="@+id/goBackButton"
+        android:layout_marginTop="30dp">
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start"
-            android:onClick="startGame"/>
-    </LinearLayout>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Language: "
+            android:id="@+id/languageAnouncer"/>
+
+            <Spinner
+                style="@style/inputfieldSpinner"
+                android:layout_toRightOf="@+id/languageAnouncer"
+                android:id="@+id/languageSpinner"/>
+    </RelativeLayout>
 
 
     <LinearLayout
@@ -24,7 +40,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/inputfield_p1"
         android:layout_marginTop="40dp"
-        android:layout_below="@+id/start_button">
+        android:layout_below="@+id/spinnerContainer">
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,11 +54,11 @@
 
             <Spinner
                 style="@style/inputfieldSpinner"
-                android:id="@+id/spinnerP1"/>
+                android:id="@+id/spinnerP1Settings"/>
 
             <EditText
                 style="@style/inputfieldEditText"
-                android:id="@+id/usernameInputP1Startupscreen"
+                android:id="@+id/usernameInputP1Settings"
                 android:text="P1"/>
 
         </RelativeLayout>
@@ -69,16 +85,26 @@
 
             <Spinner
                 style="@style/inputfieldSpinner"
-                android:id="@+id/spinnerP2"/>
+                android:id="@+id/spinnerP2Settings"/>
 
             <EditText
                 style="@style/inputfieldEditText"
-                android:id="@+id/usernameInputP2Startupscreen"
+                android:id="@+id/usernameInputP2Settings"
                 android:text="P2"/>
 
         </RelativeLayout>
 
     </LinearLayout>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/clearEverything"
+        android:layout_below="@+id/inputfield_p2"
+        android:text="Delte usernames \n and highscores"
+        android:onClick="clearSharedPreferences"/>
+
 
 
 </RelativeLayout>

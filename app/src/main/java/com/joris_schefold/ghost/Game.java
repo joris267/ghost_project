@@ -10,8 +10,6 @@ import java.util.Arrays;
  * Created by joris on 4/16/2015.
  */
 public class Game {
-    private String name_p1;
-    private String name_p2;
     private String word;
     private String p1_score;
     private String p2_score;
@@ -26,14 +24,13 @@ public class Game {
     public Game(Activity game,Dictionary dict, String p1, String p2) {
         /*Initializes constants. dict is dictionary to use and p1 and p2 are the names of the players*/
         game_activity = game;
-        name_p1 = p1;
-        name_p2 = p2;
         player_names = new ArrayList<>(Arrays.asList(p1, p2));
         p1_score = "";
         p2_score = "";
         word = "";
         game_dictonary = dict;
-        score_array = new String[]{"G", "H", "O", "S", "T"};
+//        score_array = new String[]{"G", "H", "O", "S", "T"};
+        score_array = new String[]{"G", "H"};
         player_turn_view = (TextView) game_activity.findViewById(R.id.player_turn_view);
         player_turn_view.setText(player_names.get(active_player));
     }
@@ -61,6 +58,7 @@ public class Game {
 
 
     String formed_word(){
+        /*Not used atm*/
         return game_dictonary.result();
     }
 
@@ -72,16 +70,20 @@ public class Game {
         * returns 1 if no words can be formed
         * returns 2 if a word of more then 3 char is formed*/
         word = word + player_input;
-//        System.out.println("How many word are there ramining:   " + Integer.toString(game_dictonary.count_remaining_words()));
+
+//        First check if a word is formed and filter after only if none has been formed.
+//        This is because HashSet can see if a word is formed really fast.
         if (game_dictonary.formed_word(word) && (word.length() > 3)){
             addLoss(active_player);
-            return 1;
+            return 2;
         }else{game_dictonary.filter(word);}
 
+//        If the dictionary is empty.
         if (game_dictonary.count_remaining_words() == 0){
             addLoss(active_player);
-            return 2;
+            return 1;
         }else {
+//            If the diconary is not empty an no word has been formed the next player is.
             active_player++;
             active_player = active_player % 2;
             player_turn_view.setText(player_names.get(active_player));
@@ -92,12 +94,14 @@ public class Game {
 
     String winner(){
         /*Returns the name of the player who won.*/
-        return player_names.get(active_player);
+//        Winning player is not the active player
+        int winning_player = (active_player + 1)%2;
+        return player_names.get(winning_player);
     }
 
     String loser(){
         /*Returns the name of the player who lost.*/
-        return player_names.get((active_player++)%2);
+        return player_names.get(active_player);
     }
 
 
@@ -105,12 +109,16 @@ public class Game {
         /*Throws error if there are more then one words remaining in the dictionary and no word has
         * been formed.
         * if not resets values*/
-        if (!(game_dictonary.count_remaining_words() == 0 || (game_dictonary.formed_word(word) &&
+//        Check if the game really has ended.
+         if (!(game_dictonary.count_remaining_words() == 0 || (game_dictonary.formed_word(word) &&
                 (word.length() > 3)))){throw new Error();}
+
+//        Reset word
         word = "";
         TextView word_view = (TextView) game_activity.findViewById(R.id.ghost_word_textview);
         word_view.setText("");
 
+//        Change starting player and active player
         starting_player ++;
         starting_player = starting_player%2;
         active_player = starting_player;
