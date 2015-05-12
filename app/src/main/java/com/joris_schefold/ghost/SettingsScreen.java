@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -150,18 +151,29 @@ public class SettingsScreen extends Activity implements AdapterView.OnItemSelect
         }
     }
 
-    protected void clearSharedPreferences() {
+    public void clearSharedPreferences(View view) {
         SharedPreferences gameScores = getSharedPreferences(gameScreen.GAMESCORES, 0);
         SharedPreferences gameDefaults = getSharedPreferences(StartupScreen.GAMEDEFAULTS, 0);
+        EditText editTextP1 = (EditText) findViewById(R.id.usernameInputP1Settings);
+        EditText editTextP2 = (EditText) findViewById(R.id.usernameInputP2Settings);
+        String nameP1 = String.valueOf(editTextP1.getText());
+        String nameP2 = String.valueOf(editTextP2.getText());
+        int language = gameDefaults.getInt("Language", 0);
         SharedPreferences.Editor editor = gameDefaults.edit();
         editor.clear();
+
+//        Keep language
+        editor.putInt("Language", language);
         editor.commit();
+//      Need to update the name Spinners
+//        initNameSpinners();
+//        editTextP1.setText(nameP1);
+//        editTextP2.setText(nameP2);
+
+
         SharedPreferences.Editor editor2 = gameScores.edit();
         editor2.clear();
         editor2.commit();
-
-        String[] a = new String[]{"b"};
-        String b = a[3];
     }
 
 

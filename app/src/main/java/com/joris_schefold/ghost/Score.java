@@ -2,6 +2,7 @@
 
 /**TO DO
  * SettingsScreen:
+ * Fix names on going back
 // *      Back button
 // *      Language Spinner
 // *          check when going back if language has changed, of so restart the game.
@@ -9,7 +10,7 @@
  *
  *Hichscores:
  *      order
- *      Titles
+// *      Titles
 // *      back to main menu
  *
  * Overall:

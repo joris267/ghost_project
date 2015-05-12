@@ -15,7 +15,7 @@ public class Game {
     private String p2_score;
     private String score_array[];
     private Activity game_activity;
-    private int starting_player = Math.round(Math.round(Math.random()));
+    private int starting_player = (int) Math.round(Math.random());
     private int active_player = starting_player;
     private Dictionary game_dictonary;
     private ArrayList<String> player_names;

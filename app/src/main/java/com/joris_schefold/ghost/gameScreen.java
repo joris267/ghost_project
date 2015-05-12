@@ -24,6 +24,7 @@ public class gameScreen extends Activity {
     public static final String GAMESCORES = "HighScoreFile";
     String p1_name;
     String p2_name;
+    DictionaryConstructor dictConst;
 
 
 /* Below two different on click listeners are created, one to confirm the input and one to move to
@@ -31,60 +32,51 @@ public class gameScreen extends Activity {
     View.OnClickListener confirm_input = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            //            Getting the user input and the word thus far
-            EditText input_field = (EditText) findViewById(R.id.player_letter_input_field);
-            String input = String.valueOf(input_field.getText()).toLowerCase();
-            TextView word_view = (TextView) findViewById(R.id.ghost_word_textview);
+//      Getting the user input and the word thus far
+        EditText input_field = (EditText) findViewById(R.id.player_letter_input_field);
+        String input = String.valueOf(input_field.getText()).toLowerCase();
+        TextView word_view = (TextView) findViewById(R.id.ghost_word_textview);
 
-            //            If the input is not a letter the user is given a warning
-            if (!input.matches("[a-z]") || input.length() != 1) {
-                Intent popUp = new Intent(getApplicationContext(), PopUpScreeh.class);
-                popUp.putExtra("errorMsg", "FOOL, \n you can only enter letters!!!");
-                popUp.putExtra("button", "I solemnly swear never to do this again");
-                startActivity(popUp);
+//      If the input is not a letter the user is given a warning
+        if (!input.matches("[a-z]") || input.length() != 1) {
+            popUpUnvalidInput();
+        } else {
+            int guessResult = game_class.valid_guess(input);
+
+//      If the input is valid update the word.
+            if (guessResult == 0) {
+                String word = String.valueOf(word_view.getText());
+                word = word + input;
+                word_view.setText(word);
+
+//      The input is not valid, the round/game was lost.
             } else {
-                int guessResult = game_class.valid_guess(input);
-
-                //                If the input is valid update the word.
-                if (guessResult == 0) {
-                    String word = String.valueOf(word_view.getText());
-                    word = word + input;
-                    word_view.setText(word);
-
-                    //                    The input is not valid, the round/game was lost.
-                } else {
-                    ((TextView) findViewById(R.id.current_word_anouncer)).setText("");
-
-                    //                    Different loss reasons.
-                    if (guessResult == 1) {
-                        String wordFragment = ((TextView) findViewById(R.id.ghost_word_textview)).getText().toString() + input;
-                        word_view.setText("You can't form a word that starts with " + wordFragment + " you lost!!!");
-                    } else if (guessResult == 2) {
-                        String word = ((TextView) findViewById(R.id.ghost_word_textview)).getText().toString() + input;
-                        word_view.setText(word + " is a word, better luck next time");
-                    }
-
-                    if (game_class.checkFinished()) {
-                        safeScore();
-                        Intent goHighscoreScreen = new Intent(getApplicationContext(), com.joris_schefold.ghost.HighscoreScreen.class);
-                        startActivity(goHighscoreScreen);
-                    } else {
-                        confirm_restart_button.setText("Next round");
-                        confirm_restart_button.setOnClickListener(next_round);
-                    }
-                }
+                resolvePlayerLost(guessResult, word_view, input);
             }
+        }
         }
     };
 
 
-    //    Moves to the next round.
+
     View.OnClickListener next_round = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            /*Moves to the next round.
+            * Sets new onclicklistner*/
             game_class.next_round();
             confirm_restart_button.setText("confirm input");
             confirm_restart_button.setOnClickListener(confirm_input);
+        }
+    };
+
+    View.OnClickListener highScores = new View.OnClickListener() {
+        /*Sets button to move to highscorescreen*/
+        @Override
+        public void onClick(View view) {
+            Intent goHighscoreScreen = new Intent(getApplicationContext(),
+                    com.joris_schefold.ghost.HighscoreScreen.class);
+            startActivity(goHighscoreScreen);
         }
     };
 
@@ -97,7 +89,7 @@ public class gameScreen extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gameScreen);
+        setContentView(R.layout.game_screen);
         gameHighScores = getSharedPreferences(GAMESCORES, 0);
         gameDefaults = getSharedPreferences(StartupScreen.GAMEDEFAULTS, 0);
 
@@ -116,13 +108,53 @@ public class gameScreen extends Activity {
         confirm_restart_button.setOnClickListener(confirm_input);
 
 //        Creates a dictionary and start the game.
-        Dictionary dictonary = new Dictionary(this, gameDefaults.getInt("Language", 0));
+//        Dictionary dictonary = new Dictionary(this, gameDefaults.getInt("Language", 0));
+        dictConst = new DictionaryConstructor(this);
+        Dictionary dictonary = dictConst.createDict(gameDefaults.getInt("Language", 0));
         game_class = new Game(this, dictonary, p1_name, p2_name);
     }
 
-    protected void onActivityResult (int requestCode, int resultCode, Intent data){
 
-//      reste names
+    private void popUpUnvalidInput(){
+        /*Creates a popup*/
+        Intent popUp = new Intent(getApplicationContext(), PopUpScreeh.class);
+        popUp.putExtra("errorMsg", "FOOL, \n you can only enter letters!!!");
+        popUp.putExtra("button", "I solemnly swear never to do this again");
+        startActivity(popUp);
+    }
+
+
+    public void resolvePlayerLost(int guessResult, TextView wordView, String input){
+        /*Sets personalized lose reason.
+        * Checks if game if finished and sets button to either go to next round or highscores*/
+        ((TextView) findViewById(R.id.current_word_anouncer)).setText("");
+
+        //                    Different loss reasons.
+        if (guessResult == 1) {
+            String wordFragment = ((TextView) findViewById(R.id.ghost_word_textview)).getText().toString() + input;
+            wordView.setText("You can't form a word that starts with " + wordFragment + " you lost!!!");
+        } else if (guessResult == 2) {
+            String word = ((TextView) findViewById(R.id.ghost_word_textview)).getText().toString() + input;
+            wordView.setText(word + " is a word, better luck next time");
+        }
+
+//        If finished go to highscores, Else to the next round.
+        if (game_class.checkFinished()) {
+            safeScore();
+            confirm_restart_button.setText("Go to Highscores");
+            confirm_restart_button.setOnClickListener(highScores);
+        } else {
+            confirm_restart_button.setText("Next round");
+            confirm_restart_button.setOnClickListener(next_round);
+        }
+    }
+
+
+    protected void onActivityResult (int requestCode, int resultCode, Intent data){
+        /*Only used when coming back from settings menu
+        * Updates names and if needed restarts the game.*/
+
+//      reset names
         p1_name = data.getExtras().getString("nameP1");
         p2_name = data.getExtras().getString("nameP2");
 
@@ -133,28 +165,37 @@ public class gameScreen extends Activity {
         textNameP2.setText(p2_name);
 
         if(data.getExtras().getBoolean("restart")) {
-            Dictionary dictonary = new Dictionary(this, gameDefaults.getInt("Language", 0));
-            game_class = new Game(this, dictonary, p1_name, p2_name);
+            restartGame();
+        }
+    }
+
+
+    private void restartGame(){
+        /*Completely restarts the game*/
+
+//        Create new dictionary and game class.
+//        Dictionary dictonary = new Dictionary(this, gameDefaults.getInt("Language", 0));
+        Dictionary dictonary = dictConst.createDict(gameDefaults.getInt("Language", 0));
+        game_class = new Game(this, dictonary, p1_name, p2_name);
 
 //            Reset wordview en scoreviews
-            TextView wordView = (TextView) findViewById(R.id.ghost_word_textview);
-            wordView.setText("");
-            TextView scoreViewP1 = (TextView) findViewById(R.id.p1_score_view);
-            scoreViewP1.setText("");
-            TextView scoreViewP2 = (TextView) findViewById(R.id.p2_score_view);
-            scoreViewP2.setText("");
+        TextView wordView = (TextView) findViewById(R.id.ghost_word_textview);
+        wordView.setText("");
+        TextView scoreViewP1 = (TextView) findViewById(R.id.p1_score_view);
+        scoreViewP1.setText("");
+        TextView scoreViewP2 = (TextView) findViewById(R.id.p2_score_view);
+        scoreViewP2.setText("");
 
 //            Reset the button
-            confirm_restart_button = (Button) this.findViewById(R.id.confirm_restart);
-            confirm_restart_button.setText("confirm input");
-            confirm_restart_button.setOnClickListener(confirm_input);
-        }
+        confirm_restart_button = (Button) this.findViewById(R.id.confirm_restart);
+        confirm_restart_button.setText("confirm input");
+        confirm_restart_button.setOnClickListener(confirm_input);
     }
 
 
     private void safeScore() throws AssertionError {
 //        SCORE IS SAVED AS #PLAYERD;#WON
-//        NAMES ARE SAFED AS NAME;NAME;NAME.....
+//        NAMES ARE SAVED AS NAME;NAME;NAME.....
 
 //        Get previous scores.
         String winner = game_class.winner();
@@ -210,12 +251,16 @@ public class gameScreen extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+//        If settings is pressed go to settings
         if (id == R.id.actionSettingsGameScreen) {
             Intent settings = new Intent(this, SettingsScreen.class);
             settings.putExtra("p1", p1_name);
             settings.putExtra("p2", p2_name);
             startActivityForResult(settings, 0);
+
+//            If game restart is pressed restart the game
+        }else if(id == R.id.actionRestartGame){
+            restartGame();
         }
 
         return super.onOptionsItemSelected(item);

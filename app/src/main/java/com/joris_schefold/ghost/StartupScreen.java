@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 public class StartupScreen extends Activity implements AdapterView.OnItemSelectedListener {
     public static final String GAMEDEFAULTS = "DefaultsFile";
+    SharedPreferences gameDefaults;
+    private boolean userIsInteracting;
 
 
     public void onItemSelected(AdapterView<?> parent, View view,
@@ -22,9 +24,11 @@ public class StartupScreen extends Activity implements AdapterView.OnItemSelecte
 
 //        If the spinner for P1 was used update his name, otherwise update the name of P2.
         long spinnerId = (parent).getId();
-        if (spinnerId == R.id.spinnerP2){
+        if (!userIsInteracting) { //pass
+        }else if (spinnerId == R.id.spinnerP2){
             EditText textBox = (EditText)findViewById(R.id.usernameInputP2Startupscreen);
             textBox.setText(parent.getItemAtPosition(pos).toString());
+            System.out.println("changeing name p1 to " + parent.getItemAtPosition(pos).toString()  + "<====================" + userIsInteracting);
         }else{
             EditText textBox = (EditText)findViewById(R.id.usernameInputP1Startupscreen);
             textBox.setText(parent.getItemAtPosition(pos).toString());
@@ -38,24 +42,20 @@ public class StartupScreen extends Activity implements AdapterView.OnItemSelecte
 
 
     @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        userIsInteracting = true;
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startup_screen);
-        SharedPreferences gameDefaults = getSharedPreferences(StartupScreen.GAMEDEFAULTS, 0);
+        gameDefaults = getSharedPreferences(StartupScreen.GAMEDEFAULTS, 0);
 //        clearSharedPreferences();
 
-        String Names = gameDefaults.getString("playerNames", "");
-        String[] prevoriouslyChosenNames = Names.split(";");
-
-//        String[] prevoriouslyChosenNames = {"", "Jan", "Peter", "John", "Darth Vader", "no one"};
-        Spinner spin1 = (Spinner) findViewById(R.id.spinnerP1);
-        Spinner spin2 = (Spinner) findViewById(R.id.spinnerP2);
-        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, prevoriouslyChosenNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin1.setAdapter(adapter);
-        spin1.setOnItemSelectedListener(this);
-        spin2.setAdapter(adapter);
-        spin2.setOnItemSelectedListener(this);
+        initNameSpinner();
     }
 
 
@@ -95,6 +95,21 @@ public class StartupScreen extends Activity implements AdapterView.OnItemSelecte
         return super.onOptionsItemSelected(item);
     }
 
+    private boolean initNameSpinner(){
+        String Names = gameDefaults.getString("playerNames", "");
+        String[] prevoriouslyChosenNames = Names.split(";");
+
+        Spinner spin1 = (Spinner) findViewById(R.id.spinnerP1);
+        Spinner spin2 = (Spinner) findViewById(R.id.spinnerP2);
+        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, prevoriouslyChosenNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin1.setAdapter(adapter);
+        spin1.setOnItemSelectedListener(this);
+        spin2.setAdapter(adapter);
+        spin2.setOnItemSelectedListener(this);
+        return true;
+    }
+
     public void startGame(View view) {
 //        Get information player 1
         EditText inputfield_p1 = (EditText) findViewById(R.id.usernameInputP1Startupscreen);
@@ -126,12 +141,18 @@ public class StartupScreen extends Activity implements AdapterView.OnItemSelecte
         //      reste names
         String nameP1 = data.getExtras().getString("nameP1");
         String nameP2= data.getExtras().getString("nameP2");
-
-        TextView textNameP1 = (TextView) findViewById(R.id.usernameInputP1Startupscreen);
-        textNameP1.setText(nameP1);
-        TextView textNameP2 = (TextView) findViewById(R.id.usernameInputP2Startupscreen);
-        textNameP2.setText(nameP2);
-
+        if (initNameSpinner()){
+            try {
+                Thread.sleep(100);                 //1000 milliseconds is one second.
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+            TextView textNameP1 = (TextView) findViewById(R.id.usernameInputP1Startupscreen);
+            textNameP1.setText(nameP1);
+            System.out.println("chagingname p1 to ===============>" + nameP1);
+            TextView textNameP2 = (TextView) findViewById(R.id.usernameInputP2Startupscreen);
+            textNameP2.setText(nameP2);
+        }
     }
 
 }

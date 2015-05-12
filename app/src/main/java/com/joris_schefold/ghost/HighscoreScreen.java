@@ -30,7 +30,7 @@ public class HighscoreScreen extends Activity {
         highScoreTable.bringToFront();
 
 //        Create new DecimalFormat for pretty printing the scores.
-        DecimalFormat decimalFormater = new DecimalFormat("#.0");
+        DecimalFormat decimalFormater = new DecimalFormat("0.0");
 
 //        Get all the scores.
         Map<String, ?> extractedScores  = scorePrefs.getAll();
