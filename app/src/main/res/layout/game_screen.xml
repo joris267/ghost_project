@@ -16,7 +16,7 @@
         android:layout_height="0dp"
         android:text="confirm input"
         android:onClick="confirm_input"
-        android:id="@+id/confirm_restart"
+        android:id="@+id/confirmRestart"
         android:layout_weight="1" />
 
     <ProgressBar
@@ -40,14 +40,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Name p1"
-                android:id="@+id/p1_name_view"/>
+                android:id="@+id/p1NameView"/>
 
             <TextView
-                android:layout_toRightOf="@id/p1_name_view"
+                android:layout_toRightOf="@id/p1NameView"
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/p1_score_view"/>
+                android:id="@+id/p1ScoreView"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -58,14 +58,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Name p2"
-                android:id="@+id/p2_name_view"/>
+                android:id="@+id/p2NameView"/>
 
             <TextView
-                android:layout_toRightOf="@id/p2_name_view"
+                android:layout_toRightOf="@id/p2NameView"
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/p2_score_view"/>
+                android:id="@+id/p2ScoreView"/>
         </RelativeLayout>
 
     </LinearLayout>
@@ -73,7 +73,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:id="@+id/player_turn_view"
+        android:id="@+id/playerTurnView"
         android:layout_marginTop="20sp"
         android:text="Player turn goes hoere"
         android:layout_weight="1" />
@@ -88,15 +88,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="The current word is:"
-            android:id="@+id/current_word_anouncer"/>
+            android:id="@+id/currentWordAnouncer"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:layout_below="@+id/current_word_anouncer"
+            android:layout_below="@+id/currentWordAnouncer"
             style="@style/word_text_gamescreen"
-            android:id="@+id/ghost_word_textview"
+            android:id="@+id/ghostWordTextview"
             android:text=""/>
 
         <EditText
@@ -107,8 +107,8 @@
             android:text="X"
             android:maxLength="1"
             style="@style/word_text_gamescreen"
-            android:id="@+id/player_letter_input_field"
-            android:layout_toRightOf="@+id/ghost_word_textview"
-            android:layout_below="@+id/current_word_anouncer"/>
+            android:id="@+id/playerLetterInputField"
+            android:layout_toRightOf="@+id/ghostWordTextview"
+            android:layout_below="@+id/currentWordAnouncer"/>
     </RelativeLayout>
 </LinearLayout>

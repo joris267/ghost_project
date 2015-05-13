@@ -23,21 +23,23 @@ public class SettingsScreen extends Activity implements AdapterView.OnItemSelect
     private int originalLanguage;
     String orignialP1Name;
     String orignialP2Name;
-//    SettingsScreen an setOnItemSelectedListener will call onItemSelected, to stop this a bool is used
+
+//    Setting an setOnItemSelectedListener will call onItemSelected, to stop this a bool is used
 //    that is true if the actual user is calling onItemSelected.
     private boolean userIsInteracting;
 
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         long spinnerId = (parent).getId();
         if (!userIsInteracting) { //pass
-        }else if (spinnerId == R.id.languageSpinner) {
+
 //        If a new language was selected update the shared preferences
+        }else if (spinnerId == R.id.languageSpinner) {
             defaultEditor = gameDefaults.edit();
             String selectedLanguage = parent.getItemAtPosition(pos).toString();
             defaultEditor.putInt("Language", languages.get(selectedLanguage));
             defaultEditor.apply();
-            System.out.println("language changed" + languages.get(selectedLanguage) + "<=====" + selectedLanguage + "  " + pos + userIsInteracting);
+
+//        Else a name was selected, update the editText containing the name.
         }else if (spinnerId == R.id.spinnerP1Settings){
             EditText textBox = (EditText)findViewById(R.id.usernameInputP1Settings);
             textBox.setText(parent.getItemAtPosition(pos).toString());
@@ -47,6 +49,7 @@ public class SettingsScreen extends Activity implements AdapterView.OnItemSelect
         }
     }
 
+
     public void onNothingSelected(AdapterView<?> parent) {
         // Do nothing
     }
@@ -54,12 +57,15 @@ public class SettingsScreen extends Activity implements AdapterView.OnItemSelect
 
     @Override
     public void onUserInteraction() {
+        /**Checks if a user is interacting a or an automated process*/
         super.onUserInteraction();
         userIsInteracting = true;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /**Initialize some constants*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         gameDefaults = getSharedPreferences(StartupScreen.GAMEDEFAULTS, 0);
@@ -83,33 +89,11 @@ public class SettingsScreen extends Activity implements AdapterView.OnItemSelect
 
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_settings, menu);
-        return true;
-    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
     private void initNameSpinners(){
+        /**Initialize the name spinners with all the playernames in gameDefaults*/
         String Names = gameDefaults.getString("playerNames", "");
         String[] prevoriouslyChosenNames = Names.split(";");
 
-//        String[] prevoriouslyChosenNames = {"", "Jan", "Peter", "John", "Darth Vader", "no one"};
         Spinner spin1 = (Spinner) findViewById(R.id.spinnerP1Settings);
         Spinner spin2 = (Spinner) findViewById(R.id.spinnerP2Settings);
         ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, prevoriouslyChosenNames);
@@ -121,6 +105,7 @@ public class SettingsScreen extends Activity implements AdapterView.OnItemSelect
     }
 
     public void initLanguageSpinner(){
+        /**Initialize with all the possible languages. Set the current language as the dispayed value*/
         String[] laugageList = languages.keySet().toArray(new String[languages.size()]);
 
 //        Initialize spinner
@@ -151,7 +136,9 @@ public class SettingsScreen extends Activity implements AdapterView.OnItemSelect
         }
     }
 
+
     public void clearSharedPreferences(View view) {
+
         SharedPreferences gameScores = getSharedPreferences(gameScreen.GAMESCORES, 0);
         SharedPreferences gameDefaults = getSharedPreferences(StartupScreen.GAMEDEFAULTS, 0);
         EditText editTextP1 = (EditText) findViewById(R.id.usernameInputP1Settings);
@@ -170,7 +157,6 @@ public class SettingsScreen extends Activity implements AdapterView.OnItemSelect
 //        editTextP1.setText(nameP1);
 //        editTextP2.setText(nameP2);
 
-
         SharedPreferences.Editor editor2 = gameScores.edit();
         editor2.clear();
         editor2.commit();
@@ -178,7 +164,9 @@ public class SettingsScreen extends Activity implements AdapterView.OnItemSelect
 
 
     public void goBack(View view) {
-        //        Function for going back
+        /**Function for going back, checks if something vital has changed*/
+
+//        Create new intent and get player names.
         Intent goingBack = new Intent();
         EditText p1TextView = (EditText)findViewById(R.id.usernameInputP1Settings);
         EditText p2TextView = (EditText)findViewById(R.id.usernameInputP2Settings);

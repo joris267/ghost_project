@@ -13,32 +13,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+/**Activity that is loaded on startup. Here players enter their name and start the game.*/
+
 public class StartupScreen extends Activity implements AdapterView.OnItemSelectedListener {
     public static final String GAMEDEFAULTS = "DefaultsFile";
     SharedPreferences gameDefaults;
     private boolean userIsInteracting;
-
-
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-
-//        If the spinner for P1 was used update his name, otherwise update the name of P2.
-        long spinnerId = (parent).getId();
-        if (!userIsInteracting) { //pass
-        }else if (spinnerId == R.id.spinnerP2){
-            EditText textBox = (EditText)findViewById(R.id.usernameInputP2Startupscreen);
-            textBox.setText(parent.getItemAtPosition(pos).toString());
-            System.out.println("changeing name p1 to " + parent.getItemAtPosition(pos).toString()  + "<====================" + userIsInteracting);
-        }else{
-            EditText textBox = (EditText)findViewById(R.id.usernameInputP1Startupscreen);
-            textBox.setText(parent.getItemAtPosition(pos).toString());
-        }
-
-    }
-
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Do nothing
-    }
 
 
     @Override
@@ -50,11 +30,10 @@ public class StartupScreen extends Activity implements AdapterView.OnItemSelecte
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /**Load shared preferences and init spinners*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startup_screen);
         gameDefaults = getSharedPreferences(StartupScreen.GAMEDEFAULTS, 0);
-//        clearSharedPreferences();
-
         initNameSpinner();
     }
 
@@ -74,84 +53,117 @@ public class StartupScreen extends Activity implements AdapterView.OnItemSelecte
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.settingsStartupScreen) {
 
+//            Get information player 1
+            EditText inputfieldP1 = (EditText) findViewById(R.id.usernameInputP1Startupscreen);
+            String usernameP1 = String.valueOf(inputfieldP1.getText());
 
-            //        Get information player 1
-            EditText inputfield_p1 = (EditText) findViewById(R.id.usernameInputP1Startupscreen);
-            String username_p1 = String.valueOf(inputfield_p1.getText());
+//            Get information player 2
+            EditText inputfieldP2 = (EditText) findViewById(R.id.usernameInputP2Startupscreen);
+            String usernameP2 = String.valueOf(inputfieldP2.getText());
 
-//        Get information player 2
-            EditText inputfield_p2 = (EditText) findViewById(R.id.usernameInputP2Startupscreen);
-            String username_p2 = String.valueOf(inputfield_p2.getText());
-
+//            Go to the settings screen and pass on the player names.
             Intent settings = new Intent(this, SettingsScreen.class);
-            settings.putExtra("p1", username_p1);
-            settings.putExtra("p2", username_p2);
+            settings.putExtra("p1", usernameP1);
+            settings.putExtra("p2", usernameP2);
             startActivityForResult(settings,0);
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean initNameSpinner(){
-        String Names = gameDefaults.getString("playerNames", "");
-        String[] prevoriouslyChosenNames = Names.split(";");
-
-        Spinner spin1 = (Spinner) findViewById(R.id.spinnerP1);
-        Spinner spin2 = (Spinner) findViewById(R.id.spinnerP2);
-        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, prevoriouslyChosenNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin1.setAdapter(adapter);
-        spin1.setOnItemSelectedListener(this);
-        spin2.setAdapter(adapter);
-        spin2.setOnItemSelectedListener(this);
-        return true;
-    }
-
-    public void startGame(View view) {
-//        Get information player 1
-        EditText inputfield_p1 = (EditText) findViewById(R.id.usernameInputP1Startupscreen);
-        String username_p1 = String.valueOf(inputfield_p1.getText());
-
-//        Get information player 2
-        EditText inputfield_p2 = (EditText) findViewById(R.id.usernameInputP2Startupscreen);
-        String username_p2 = String.valueOf(inputfield_p2.getText());
-
-        if (username_p1.length() == 0 || username_p2.length() == 0 || username_p1.equals(username_p2)) {
-            Intent popUp = new Intent(getApplicationContext(), PopUpScreeh.class);
-            popUp.putExtra("errorMsg", "A player has a unique name....");
-            popUp.putExtra("button", "Oops, I forgot");
-            startActivity(popUp);
-        }else{
-            Intent getNameScreenIntent = new Intent(this,
-                    gameScreen.class);
-            final int result = 1;
-
-            //Put the information in the intent.
-            getNameScreenIntent.putExtra("name_p1", username_p1);
-            getNameScreenIntent.putExtra("name_p2", username_p2);
-            startActivityForResult(getNameScreenIntent, result);
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        //      reste names
+        /**Only used when coming back from settings menu
+         * Updates names and if needed restarts the spinners.*/
+
+//        If needed reload Spinners
+        if(data.getExtras().getBoolean("restart")) {initNameSpinner();}
+
+//        reset name player 1
         String nameP1 = data.getExtras().getString("nameP1");
-        String nameP2= data.getExtras().getString("nameP2");
-        if (initNameSpinner()){
-            try {
-                Thread.sleep(100);                 //1000 milliseconds is one second.
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-            TextView textNameP1 = (TextView) findViewById(R.id.usernameInputP1Startupscreen);
-            textNameP1.setText(nameP1);
-            System.out.println("chagingname p1 to ===============>" + nameP1);
-            TextView textNameP2 = (TextView) findViewById(R.id.usernameInputP2Startupscreen);
-            textNameP2.setText(nameP2);
+        TextView textNameP1 = (TextView) findViewById(R.id.usernameInputP1Startupscreen);
+        textNameP1.setText(nameP1);
+
+//        reset name player 2
+        String nameP2 = data.getExtras().getString("nameP2");
+        TextView textNameP2 = (TextView) findViewById(R.id.usernameInputP2Startupscreen);
+        textNameP2.setText(nameP2);
+    }
+
+
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        /**Update the editText containing the player name if a player name was selected using the
+         * Spinner drop down menu.*/
+
+        long spinnerId = (parent).getId();
+
+        if (!userIsInteracting) { // If it was an automated call from innitSipinner pass
+
+//            Udate name player1 or player2
+        }else if (spinnerId == R.id.spinnerP2){
+            EditText textBox = (EditText)findViewById(R.id.usernameInputP2Startupscreen);
+            textBox.setText(parent.getItemAtPosition(pos).toString());
+        }else{
+            EditText textBox = (EditText)findViewById(R.id.usernameInputP1Startupscreen);
+            textBox.setText(parent.getItemAtPosition(pos).toString());
+        }
+    }
+
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Do nothing
+    }
+
+
+    private void initNameSpinner(){
+        /**Initialize the name spinners with all the playernames in gameDefaults*/
+
+//        Get the names, split then and set them as dropdownview
+        String Names = gameDefaults.getString("playerNames", "");
+        String[] prevoriouslyChosenNames = Names.split(";");
+        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, prevoriouslyChosenNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+//        Set the adapter on the spinner for player 1
+        Spinner spin1 = (Spinner) findViewById(R.id.spinnerP1);
+        spin1.setAdapter(adapter);
+        spin1.setOnItemSelectedListener(this);
+
+//        Set the adapter on the spinner for player 2
+        Spinner spin2 = (Spinner) findViewById(R.id.spinnerP2);
+        spin2.setAdapter(adapter);
+        spin2.setOnItemSelectedListener(this);
+    }
+
+
+    public void startGame(View view) {
+        /**Checks if the players both have chosen a different name.
+         * Start the game if they have.
+         * Creates a popUp if they haven't*/
+
+//        Get information player 1
+        EditText inputfieldP1 = (EditText) findViewById(R.id.usernameInputP1Startupscreen);
+        String usernameP1 = String.valueOf(inputfieldP1.getText());
+
+//        Get information player 2
+        EditText inputfieldP2 = (EditText) findViewById(R.id.usernameInputP2Startupscreen);
+        String usernameP2 = String.valueOf(inputfieldP2.getText());
+
+//        If players haven't chosen a unique name warn them.
+        if (usernameP1.length() == 0 || usernameP2.length() == 0 || usernameP1.equals(usernameP2)) {
+            Intent popUp = new Intent(getApplicationContext(), PopUpScreen.class);
+            popUp.putExtra("errorMsg", "A player has a unique name....");
+            popUp.putExtra("button", "Oops, I forgot");
+            startActivity(popUp);
+
+//        Create new Intent Intent, add the player name, and start it.
+        }else{
+            Intent getNameScreenIntent = new Intent(this, gameScreen.class);
+            getNameScreenIntent.putExtra("nameP1", usernameP1);
+            getNameScreenIntent.putExtra("nameP2", usernameP2);
+            startActivity(getNameScreenIntent);
         }
     }
 

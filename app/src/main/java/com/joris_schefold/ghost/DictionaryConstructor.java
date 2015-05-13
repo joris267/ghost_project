@@ -12,7 +12,9 @@ import java.util.HashSet;
 
 /**
  * Created by joris on 5/12/2015.
+ * This class can open files to create dictionaries.
  */
+
 public class DictionaryConstructor {
     Activity activity;
     HashSet dict;
@@ -23,6 +25,7 @@ public class DictionaryConstructor {
     }
 
     public Dictionary createDict(int fileId){
+        /**Create a dictionary from fileId*/
         dict = loadDictonary(fileId);
         return new Dictionary(dict);
     }
@@ -61,6 +64,4 @@ public class DictionaryConstructor {
         }
         return true;
     }
-
-
 }

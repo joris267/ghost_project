@@ -3,77 +3,37 @@ package com.joris_schefold.ghost;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HighscoreScreen extends Activity {
     Map<String, int[]> allScores;
+    DecimalFormat decimalFormater;
+    TableLayout highScoreTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /**Loads scores from sharedPreferences and initilizes the high score table*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_highscore_screen);
 
+//        Create new DecimalFormat for pretty printing the scores.
+        decimalFormater = new DecimalFormat("0.0");
+
 //        Get the scores from sharedPreferences and find the tableView.
         SharedPreferences scorePrefs = getSharedPreferences(gameScreen.GAMESCORES, 0);
-        TableLayout highScoreTable = (TableLayout)findViewById(R.id.highScoresTable);
+        Map<String, ?> extractedScores  = scorePrefs.getAll();
+        highScoreTable = (TableLayout)findViewById(R.id.highScoresTable);
         highScoreTable.setStretchAllColumns(true);
         highScoreTable.bringToFront();
 
-//        Create new DecimalFormat for pretty printing the scores.
-        DecimalFormat decimalFormater = new DecimalFormat("0.0");
-
-//        Get all the scores.
-        Map<String, ?> extractedScores  = scorePrefs.getAll();
-        allScores = new HashMap<>();
-
-        addRow("Name", "#played", "#won", "ratio", highScoreTable);
-
-//        Loop over all the scores and split them.
-        for (Object scoreString : extractedScores.entrySet()) {
-            Map.Entry pair = (Map.Entry) scoreString;
-            String[] scoreArray = ((String) pair.getValue()).split(";");
-            System.out.println(Arrays.toString(scoreArray) + "  scorestring");
-            int[] score = {Integer.parseInt(scoreArray[0]), Integer.parseInt(scoreArray[1])};
-            allScores.put((String) pair.getKey(), score);
-
-            double percentage = (double) 100 * score[1] / score[0];
-
-            addRow((String) pair.getKey(), scoreArray[0], scoreArray[1],
-                    decimalFormater.format(percentage) + "%", highScoreTable);
-        }
-    }
-
-
-    private void addRow(String a, String b, String c, String d, TableLayout highScoreTable){
-        //            Create the new row and collums for the scores.
-        TableRow row = new TableRow(this);
-        TextView collumName = new TextView(this);
-        TextView collumPlayed = new TextView(this);
-        TextView collumWin = new TextView(this);
-        TextView collumPercentage = new TextView(this);
-
-//            Set the values for the views.
-        collumName.setText(a);
-        collumPlayed.setText(b);
-        collumWin.setText(c);
-        collumPercentage.setText(d);
-
-//            Add views to the main table.
-        row.addView(collumName);
-        row.addView(collumPlayed);
-        row.addView(collumWin);
-        row.addView(collumPercentage);
-        highScoreTable.addView(row);
+        initTable(extractedScores);
     }
 
 
@@ -83,30 +43,56 @@ public class HighscoreScreen extends Activity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_highscore_screen, menu);
-        return true;
+    private void initTable(Map scores){
+        /**Add all values of scores to the table, also adds header*/
+        allScores = new HashMap<>();
+        addRow("NAME", "#PLAYED", "#WON", "RATIO");
+
+//        Loop over all the scores, split them and add them to allScores.
+        for (Object scoreString : scores.entrySet()) {
+            Map.Entry pair = (Map.Entry) scoreString;
+            String[] scoreArray = ((String) pair.getValue()).split(";");
+            int[] score = {Integer.parseInt(scoreArray[0]), Integer.parseInt(scoreArray[1])};
+            allScores.put((String) pair.getKey(), score);
+
+//            Calculate winn percentage
+            double percentage = (double) 100 * score[1] / score[0];
+
+//            Add everything to the table
+            addRow((String) pair.getKey(), scoreArray[0], scoreArray[1],
+                    decimalFormater.format(percentage) + "%");
+        }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.settingsStartupScreen) {
-            return true;
-        }
+    private void addRow(String a, String b, String c, String d){
+        /**Add a new row to the table with four columns.
+         * Item a goes in the first column, b in the second etc.*/
 
-        return super.onOptionsItemSelected(item);
+ //        Create the new row and columns for the scores.
+        TableRow row = new TableRow(this);
+        TextView collumName = new TextView(this);
+        TextView collumPlayed = new TextView(this);
+        TextView collumWin = new TextView(this);
+        TextView collumPercentage = new TextView(this);
+
+//       Set the values for the views.
+        collumName.setText(a);
+        collumPlayed.setText(b);
+        collumWin.setText(c);
+        collumPercentage.setText(d);
+
+//        Add views to the main table.
+        row.addView(collumName);
+        row.addView(collumPlayed);
+        row.addView(collumWin);
+        row.addView(collumPercentage);
+        highScoreTable.addView(row);
     }
 
 
     public void BackToMain(View view) {
+        /**Go back to StartupScreen*/
         Intent back = new Intent(this, StartupScreen.class);
         startActivity(back);
     }
