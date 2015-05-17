@@ -9,11 +9,14 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HighscoreScreen extends Activity {
-    Map<String, int[]> allScores;
+    ArrayList<Score>  allScores;
     DecimalFormat decimalFormater;
     TableLayout highScoreTable;
 
@@ -45,22 +48,27 @@ public class HighscoreScreen extends Activity {
 
     private void initTable(Map scores){
         /**Add all values of scores to the table, also adds header*/
-        allScores = new HashMap<>();
+        allScores = new ArrayList<>();
         addRow("NAME", "#PLAYED", "#WON", "RATIO");
 
 //        Loop over all the scores, split them and add them to allScores.
         for (Object scoreString : scores.entrySet()) {
             Map.Entry pair = (Map.Entry) scoreString;
             String[] scoreArray = ((String) pair.getValue()).split(";");
-            int[] score = {Integer.parseInt(scoreArray[0]), Integer.parseInt(scoreArray[1])};
-            allScores.put((String) pair.getKey(), score);
+            Score score = new Score((String) pair.getKey(), Integer.parseInt(scoreArray[0]), Integer.parseInt(scoreArray[1]));
+            allScores.add(score);
+        }
 
-//            Calculate winn percentage
-            double percentage = (double) 100 * score[1] / score[0];
 
-//            Add everything to the table
-            addRow((String) pair.getKey(), scoreArray[0], scoreArray[1],
-                    decimalFormater.format(percentage) + "%");
+        Collections.sort(allScores, Score.totalComperator());
+
+//        Add everything to the table in reverse order, this is because first added element is
+//        pushed to the bottom of the table by subsequent elements.
+        for (int i = allScores.size() -1; i >= 0; i--){
+            Score score = allScores.get(i);
+            addRow(score.getName(), Integer.toString(score.getNumberPlayed()),
+                    Integer.toString(score.getNumberWon()),
+                    decimalFormater.format(score.getPercetage()) + "%");
         }
     }
 

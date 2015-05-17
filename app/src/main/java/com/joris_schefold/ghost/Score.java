@@ -1,50 +1,81 @@
+package com.joris_schefold.ghost;
+
+import java.util.Comparator;
+
+/**
+* Created by joris on 4/30/2015.
+* Class that holds all the attributes of the score.
+* Name, #gamesplayed, #gameswon and the percentage.
+*/
+
+public class Score{
+    private String scoreName;
+    private int scorePlayed;
+    private int scoreWon;
+    private float scorePercentage;
+
+    public Score(String name, int gamesPlayed, int gamesWon){
+        scoreName = name;
+        scorePlayed = gamesPlayed;
+        scoreWon = gamesWon;
+        scorePercentage = (gamesWon / (float) gamesPlayed) * 100;
+    }
+
+    public int getNumberPlayed(){
+        return scorePlayed;
+    }
 
 
-/**TO DO
- * SettingsScreen:
- * Fix names on going back
-// *      Back button
-// *      Language Spinner
-// *          check when going back if language has changed, of so restart the game.
-// *      Name changer
- *
- *Hichscores:
- *      order
-// *      Titles
-// *      back to main menu
- *
- * Overall:
-// *      Disable going back
- *      */
+    public int getNumberWon(){
+        return scoreWon;
+    }
+
+
+    public float getPercetage(){
+        return scorePercentage;
+    }
+
+
+    public String getName(){
+        return scoreName;
+    }
 
 
 
 
-//package com.joris_schefold.ghost;
-//
-///**
-// * Created by joris on 4/30/2015.
-// */
-//public class Score implements Comparable<Score> {
-//    String scoreName;
-//    int scorePlayed;
-//    int scoreWon;
-//    float scorePercentage;
-//
-//    public Score(String name, int gamesPlayed, int gamesWon){
-//        scoreName = name;
-//        scorePlayed = gamesPlayed;
-//        scoreWon = gamesPlayed;
-//        scorePercentage = gamesWon / (float) gamesPlayed;
+    static Comparator<Score> totalComperator() {
+        return new Comparator<Score>() {
+            public int compare(Score one, Score two) {
+                /** return 0 if equal
+                * 1 if one greater then two
+                * -1 if one smaller then two*/
+                float scoreOne = one.getNumberPlayed() * one.getPercetage();
+                float scoreTwo = two.getNumberPlayed() * two.getPercetage();
+                if (scoreOne == scoreTwo){
+                    return 0;
+                }else if(scoreOne > scoreTwo){
+                    return 1;
+                }else{
+                    return -1;
+                }
+            }
+        };
+    }
+
+//    static Comparator<Score> getAttribute2Comparator() {
+//        return new Comparator<Score>() {
+//            // compare using attribute 2
+//        };
 //    }
-//
+
+
 //    public int compareTo(Score sc){
 //        //return 0 if equal
-//        //1 if passed greater than this
-//        //-1 if this greater than passed
+//        //1 if one greater then two
+//        //-1 if one smaller then two
 //        return sc.scoreNum>scoreNum? 1 : sc.scoreNum<scoreNum? -1 : 0;
 //    }
-//}
+}
 
 
 
