@@ -1,8 +1,6 @@
 package com.joris_schefold.ghost;
 
 
-import android.app.Activity;
-
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -15,10 +13,9 @@ import java.util.Iterator;
 public class Dictionary{
     private HashSet<String> activeDictionary = new HashSet<>();
     private HashSet<String> filteredList = new HashSet<>();
-    private Activity dictonaryActivity;
 
 
-    public Dictionary(HashSet dict){
+    public Dictionary(HashSet<String> dict){
         activeDictionary = dict;
         filteredList = deepCloneHashSet(activeDictionary);
     }
@@ -63,8 +60,7 @@ public class Dictionary{
     public String result(){
         /**Returns the last remaining word if there is only one word left, null otherwise.*/
         if (this.countRemainingWords() == 1) {
-            Iterator<String> iter = filteredList.iterator();
-            return iter.next();
+            return (String) (filteredList.toArray())[0];
         }
         return null;
     }

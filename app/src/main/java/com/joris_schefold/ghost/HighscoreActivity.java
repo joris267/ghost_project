@@ -10,12 +10,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
-public class HighscoreScreen extends Activity {
+public class HighscoreActivity extends Activity {
     ArrayList<Score>  allScores;
     DecimalFormat decimalFormater;
     TableLayout highScoreTable;
@@ -24,13 +22,13 @@ public class HighscoreScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         /**Loads scores from sharedPreferences and initilizes the high score table*/
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_highscore_screen);
+        setContentView(R.layout.layout_highscore_screen);
 
 //        Create new DecimalFormat for pretty printing the scores.
         decimalFormater = new DecimalFormat("0.0");
 
 //        Get the scores from sharedPreferences and find the tableView.
-        SharedPreferences scorePrefs = getSharedPreferences(gameScreen.GAMESCORES, 0);
+        SharedPreferences scorePrefs = getSharedPreferences(GameActivity.GAMESCORES, 0);
         Map<String, ?> extractedScores  = scorePrefs.getAll();
         highScoreTable = (TableLayout)findViewById(R.id.highScoresTable);
         highScoreTable.setStretchAllColumns(true);
@@ -42,7 +40,7 @@ public class HighscoreScreen extends Activity {
 
     @Override
     public void onBackPressed() {
-//        Disabled
+        finish();
     }
 
 
@@ -59,7 +57,6 @@ public class HighscoreScreen extends Activity {
             allScores.add(score);
         }
 
-
         Collections.sort(allScores, Score.totalComperator());
 
 //        Add everything to the table in reverse order, this is because first added element is
@@ -68,14 +65,14 @@ public class HighscoreScreen extends Activity {
             Score score = allScores.get(i);
             addRow(score.getName(), Integer.toString(score.getNumberPlayed()),
                     Integer.toString(score.getNumberWon()),
-                    decimalFormater.format(score.getPercetage()) + "%");
+                    decimalFormater.format(score.getPercentage()) + "%");
         }
     }
 
 
-    private void addRow(String a, String b, String c, String d){
+    private void addRow(String collum1, String collum2, String collum3, String collum4){
         /**Add a new row to the table with four columns.
-         * Item a goes in the first column, b in the second etc.*/
+         * Item collum1 goes in the first column, collum2 in the second etc.*/
 
  //        Create the new row and columns for the scores.
         TableRow row = new TableRow(this);
@@ -85,10 +82,10 @@ public class HighscoreScreen extends Activity {
         TextView collumPercentage = new TextView(this);
 
 //       Set the values for the views.
-        collumName.setText(a);
-        collumPlayed.setText(b);
-        collumWin.setText(c);
-        collumPercentage.setText(d);
+        collumName.setText(collum1);
+        collumPlayed.setText(collum2);
+        collumWin.setText(collum3);
+        collumPercentage.setText(collum4);
 
 //        Add views to the main table.
         row.addView(collumName);
@@ -99,9 +96,9 @@ public class HighscoreScreen extends Activity {
     }
 
 
-    public void BackToMain(View view) {
-        /**Go back to StartupScreen*/
-        Intent back = new Intent(this, StartupScreen.class);
+    public void backToMain(View view) {
+        /**Go back to StartupActivity*/
+        Intent back = new Intent(this, StartupActivity.class);
         startActivity(back);
     }
 }

@@ -4,7 +4,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.joris_schefold.ghost.PopUpScreen"
+    tools:context="com.joris_schefold.ghost.PopUpActivity"
     android:background="@color/transparent">
 
     <RelativeLayout
@@ -14,17 +14,17 @@
         android:layout_centerInParent="true"
         android:padding="15dp"
         android:background="@color/black">
-        <TextView android:text="Error"
+        <TextView android:text="@string/defaultErrorMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/errorMsg"/>
 
         <Button
-            android:paddingTop="5dp"
+            android:paddingTop="15dp"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Back"
+            android:text="@string/defaultErrorBackButton"
             android:layout_below="@+id/errorMsg"
             android:id="@+id/backButton"
             android:onClick="lessonLearned"/>

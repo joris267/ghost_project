@@ -2,8 +2,6 @@ package com.joris_schefold.ghost;
 
 import android.app.Activity;
 
-import com.joris_schefold.ghost.Dictionary;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,18 +15,20 @@ import java.util.HashSet;
 
 public class DictionaryConstructor {
     Activity activity;
-    HashSet dict;
+    HashSet<String> dict;
 
 
     public DictionaryConstructor(Activity activ) {
         activity = activ;
     }
 
+
     public Dictionary createDict(int fileId){
         /**Create a dictionary from fileId*/
         dict = loadDictonary(fileId);
         return new Dictionary(dict);
     }
+
 
     HashSet<String> loadDictonary(int fileId){
         /**Loads the dictinary from file with fileID.
@@ -47,11 +47,10 @@ public class DictionaryConstructor {
                 if (isAlpha(line)) {dictionary.add(line.toLowerCase());}
             }
             buffreader.close();
-        }catch (IOException e){System.out.println(e + "<============");}
+        }catch (IOException e){dictionary.add("ERROR");}//Do nothing, demanded by androidStudio
 
         return dictionary;
     }
-
 
 
     public boolean isAlpha(String word) {

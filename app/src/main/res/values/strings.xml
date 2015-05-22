@@ -6,4 +6,21 @@
     <string name="title_activity_pop_up">popUp</string>
     <string name="title_activity_highscore_screen">HighscoreScreen</string>
     <string name="title_activity_settings">settings</string>
+    <string name="confirmInputButton">confirm input</string>
+    <string name="defaultP1NameGameScreen">Name p1</string>
+    <string name="defaultNameP1GameScreen">Name p2</string>
+    <string name="defaultPlayerTurnGameScreen">Player turn goes here</string>
+    <string name="defaultCurrentWordAnnouncerGameScreen">The current word is:</string>
+    <string name="defaultErrorMessage">Error</string>
+    <string name="defaultErrorBackButton">Back</string>
+    <string name="startButtonStartupScreen">Start</string>
+    <string name="enterNameP1">Enter name player 1</string>
+    <string name="defaultP1Name">P1</string>
+    <string name="defaultNameP2">P2</string>
+    <string name="usernameInputP2Startupscreen">Enter name player 2</string>
+    <string name="backToMainButtonHighscores">Back to Main Menu</string>
+    <string name="settingsScreenReset">Delte usernames \n and highscores</string>
+    <string name="languageSpinnerAnouncerSettings">Language:</string>
+    <string name="backButtonTextSettings">Back</string>
+    <string name="goTohighScoreButton">Go to high scores</string>
 </resources>

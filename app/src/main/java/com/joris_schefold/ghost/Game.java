@@ -1,7 +1,5 @@
 package com.joris_schefold.ghost;
 
-import android.app.Activity;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,25 +13,42 @@ public class Game {
     private String scoreP1;
     private String scoreP2;
     private String scoreArray[];
-    private Activity gameActivity;
     private int startingPlayer = (int) Math.round(Math.random());
-    private int activePlayer = startingPlayer;
+    private int activePlayer;
     private Dictionary gameDictonary;
     private ArrayList<String> playerNames;
-    TextView playerTurnTiew;
 
-    public Game(Activity game,Dictionary dict, String p1, String p2) {
+
+    public Game(Dictionary dict, String p1, String p2) {
         /**Initializes constants. dict is dictionary to use and p1 and p2 are the names of the players*/
-        gameActivity = game;
         playerNames = new ArrayList<>(Arrays.asList(p1, p2));
         scoreP1 = "";
         scoreP2 = "";
         word = "";
         gameDictonary = dict;
-//        scoreArray = new String[]{"G", "H", "O", "S", "T"};
-        scoreArray = new String[]{"G", "H"};
-        playerTurnTiew = (TextView) gameActivity.findViewById(R.id.playerTurnView);
-        playerTurnTiew.setText(playerNames.get(activePlayer));
+        scoreArray = new String[]{"G", "H", "O", "S", "T"};
+        activePlayer = startingPlayer;
+    }
+
+
+    public Game(Dictionary dict, String p1, String p2, String oldScoreP1, String oldScoreP2,
+                String oldWord, String oldActivePlayer) {
+        /**Initializes constants. dict is dictionary to use and p1 and p2 are the names of the players*/
+        playerNames = new ArrayList<>(Arrays.asList(p1, p2));
+        scoreP1 = oldScoreP1;
+        scoreP2 = oldScoreP2;
+        word = oldWord;
+        gameDictonary = dict;
+
+//        Filter the dictonary on the previous word
+        dict.filter(word);
+        scoreArray = new String[]{"G", "H", "O", "S", "T"};
+        activePlayer = playerNames.indexOf(oldActivePlayer);
+    }
+
+
+    public String getActivePlayer(){
+        return playerNames.get(activePlayer);
     }
 
 
@@ -49,50 +64,64 @@ public class Game {
         * Returns True if the game is finished (one of the players has GHOST)*/
         if (i == 0) {
             scoreP1 = scoreP1 + scoreArray[scoreP1.length()];
-            TextView p1ScoreView = (TextView) gameActivity.findViewById(R.id.p1ScoreView);
-            p1ScoreView.setText(scoreP1);
         } else {
             scoreP2 = scoreP2 + scoreArray[scoreP2.length()];
-            TextView p2ScoreView = (TextView) gameActivity.findViewById(R.id.p2ScoreView);
-            p2ScoreView.setText(scoreP2);
         }
     }
 
 
-    String formedWord(){
-        /*Not used atm*/
-        return gameDictonary.result();
+    public String getWord(){
+        return word;
     }
 
 
-    int validGuess(String playerInput){
+    public String getScore(String player){
+        /**Returns the score of player*/
+
+//        Convert player name to index to find out if it is player 1 or player 2
+        int i = playerNames.indexOf(player);
+        if (i == 0){return scoreP1;}
+        else {return scoreP2;}
+    }
+
+
+    boolean checkRoundEnded(String playerInput){
         /**Checks if the input (a letter) is valid. adds loss of it isn't and changes active player
         * if it is.
-        * returns 0 if valid guess
-        * returns 1 if no words can be formed
-        * returns 2 if a word of more then 3 char is formed*/
+         * Returns true if round has ended (input NOT valid)
+         * Returns false if input is valid.*/
         word = word + playerInput;
 
 //        First check if a word is formed and filter after only if none has been formed.
 //        This is because HashSet can see if a word is formed really fast.
         if (gameDictonary.formedWord(word) && (word.length() > 3)){
             addLoss(activePlayer);
-            return 2;
+            return true;
         }else{
             gameDictonary.filter(word);}
 
 //        If the dictionary is empty it is impossible to form words.
         if (gameDictonary.countRemainingWords() == 0){
             addLoss(activePlayer);
-            return 1;
+            return true;
 
 //        If the dictionary is not empty an no word has been formed the next player is.
         }else {
             activePlayer++;
             activePlayer = activePlayer % 2;
-            playerTurnTiew.setText(playerNames.get(activePlayer));
-            return 0;
+            return false;
         }
+    }
+
+
+    boolean nextRoundListener(){
+        /**Returns true if round has ended
+         * Returns false otherwise.*/
+
+//        If a word has formed or no words can be formed the round has ended.
+//        If the dictionary is not empty an no word has been formed the round goes on
+        return (gameDictonary.formedWord(word) && (word.length() > 3)) ||
+                gameDictonary.countRemainingWords() == 0;
     }
 
 
@@ -110,25 +139,36 @@ public class Game {
     }
 
 
-    public void nextRound() throws Error {
+    public void nextRound() throws gameTerminationException {
         /**Throws error if the round hasn't ended.
-        * If the round has ended it resets all the values and sets the onClickListener for the next
-         * round.*/
+        * If the round has ended it resets all the values*/
 //        Check if the game really has ended.
          if (!(gameDictonary.countRemainingWords() == 0 || (gameDictonary.formedWord(word) &&
-                (word.length() > 3)))){throw new Error();}
+                (word.length() > 3)))){throw new gameTerminationException(
+                 "Program tried to terminate game round before it was finished.");}
 
 //        Reset the word and dictionary.
         word = "";
-        TextView wordView = (TextView) gameActivity.findViewById(R.id.ghostWordTextview);
-        wordView.setText("");
         gameDictonary.reset();
 
 //        Change starting player and active player.
         startingPlayer++;
         startingPlayer = startingPlayer %2;
         activePlayer = startingPlayer;
-        TextView activePlayerView = (TextView) gameActivity.findViewById(R.id.playerTurnView);
-        activePlayerView.setText(playerNames.get(activePlayer));
+    }
+
+
+    public String getLossText() {
+        if (gameDictonary.formedWord(word) && (word.length() > 3)){
+            return word + " is a word, better luck next time";
+
+//        If the dictionary is empty it is impossible to form words.
+        }else if(gameDictonary.countRemainingWords() == 0){
+            return "You can't form a word that starts with " + word + " you lost!!!";
+
+//        If  lost for no reason make funny remark.
+        }else {
+            return "You seem to have lost, maybe treat your programmers beter next time...";
+        }
     }
 }

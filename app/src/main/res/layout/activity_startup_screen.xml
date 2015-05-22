@@ -10,11 +10,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:id="@+id/start_button">
+        android:id="@+id/start_button"
+        android:gravity="center_horizontal">
+
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start"
+            android:id="@+id/button"
+            android:text="@string/goTohighScoreButton"
+            android:onClick="goToHighScores"
+            android:layout_marginRight="60sp"/>
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/startButtonStartupScreen"
             android:onClick="startGame"/>
     </LinearLayout>
 
@@ -29,7 +41,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter name player 1">
+            android:text="@string/enterNameP1">
         </TextView>
 
         <RelativeLayout
@@ -43,7 +55,7 @@
             <EditText
                 style="@style/inputfieldEditText"
                 android:id="@+id/usernameInputP1Startupscreen"
-                android:text="P1"/>
+                android:text="@string/defaultP1Name"/>
 
         </RelativeLayout>
 
@@ -60,7 +72,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter name player 2">
+            android:text="@string/usernameInputP2Startupscreen">
         </TextView>
 
         <RelativeLayout
@@ -74,11 +86,12 @@
             <EditText
                 style="@style/inputfieldEditText"
                 android:id="@+id/usernameInputP2Startupscreen"
-                android:text="P2"/>
+                android:text="@string/defaultNameP2"/>
 
         </RelativeLayout>
 
     </LinearLayout>
+
 
 
 </RelativeLayout>

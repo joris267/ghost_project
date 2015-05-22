@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 /**Activity that functions as a pop up screen, has message and one button.*/
 
-public class PopUpScreen extends Activity {
+public class PopUpActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -19,19 +19,11 @@ public class PopUpScreen extends Activity {
         TextView messageView = (TextView) findViewById(R.id.errorMsg);
         String error = getIntent().getExtras().getString("errorMsg");
         messageView.setText(error);
-//        RelativeLayout.LayoutParams layoutParams =
-//                (RelativeLayout.LayoutParams)messageView.getLayoutParams();
-//        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-//        messageView.setLayoutParams(layoutParams);
 
 //        Set text of the back button.
         TextView buttonView = (TextView) findViewById(R.id.backButton);
         String buttonText = getIntent().getExtras().getString("button");
         buttonView .setText(buttonText);
-//        RelativeLayout.LayoutParams layoutParams2 =
-//                (RelativeLayout.LayoutParams)buttonView.getLayoutParams();
-//        layoutParams2.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-//        buttonView.setLayoutParams(layoutParams2);
     }
 
 

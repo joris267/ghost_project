@@ -1,5 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" tools:context="com.joris_schefold.ghost.PopUpScreen">
+    xmlns:tools="http://schemas.android.com/tools" tools:context="com.joris_schefold.ghost.PopUpActivity">
     <item android:id="@+id/settingsStartupScreen" android:title="@string/action_settings"
         android:orderInCategory="100" android:showAsAction="never" />
 </menu>

@@ -14,12 +14,14 @@ public class Score{
     private int scoreWon;
     private float scorePercentage;
 
+
     public Score(String name, int gamesPlayed, int gamesWon){
         scoreName = name;
         scorePlayed = gamesPlayed;
         scoreWon = gamesWon;
         scorePercentage = (gamesWon / (float) gamesPlayed) * 100;
     }
+
 
     public int getNumberPlayed(){
         return scorePlayed;
@@ -31,7 +33,7 @@ public class Score{
     }
 
 
-    public float getPercetage(){
+    public float getPercentage(){
         return scorePercentage;
     }
 
@@ -41,16 +43,14 @@ public class Score{
     }
 
 
-
-
     static Comparator<Score> totalComperator() {
         return new Comparator<Score>() {
             public int compare(Score one, Score two) {
                 /** return 0 if equal
                 * 1 if one greater then two
                 * -1 if one smaller then two*/
-                float scoreOne = one.getNumberPlayed() * one.getPercetage();
-                float scoreTwo = two.getNumberPlayed() * two.getPercetage();
+                float scoreOne = one.getNumberPlayed() * one.getPercentage();
+                float scoreTwo = two.getNumberPlayed() * two.getPercentage();
                 if (scoreOne == scoreTwo){
                     return 0;
                 }else if(scoreOne > scoreTwo){
@@ -61,20 +61,6 @@ public class Score{
             }
         };
     }
-
-//    static Comparator<Score> getAttribute2Comparator() {
-//        return new Comparator<Score>() {
-//            // compare using attribute 2
-//        };
-//    }
-
-
-//    public int compareTo(Score sc){
-//        //return 0 if equal
-//        //1 if one greater then two
-//        //-1 if one smaller then two
-//        return sc.scoreNum>scoreNum? 1 : sc.scoreNum<scoreNum? -1 : 0;
-//    }
 }
 
 

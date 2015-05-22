@@ -3,21 +3,14 @@
     android:layout_width="wrap_content" android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="Go back"
-        android:onClick="BackToMain"
-        android:layout_weight="1" />
-
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:text="confirm input"
-        android:onClick="confirm_input"
+        android:text="@string/confirmInputButton"
         android:id="@+id/confirmRestart"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"/>
 
     <ProgressBar
         style="?android:attr/progressBarStyleSmall"
@@ -39,7 +32,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name p1"
+                android:text="@string/defaultP1NameGameScreen"
                 android:id="@+id/p1NameView"/>
 
             <TextView
@@ -57,7 +50,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name p2"
+                android:text="@string/defaultNameP1GameScreen"
                 android:id="@+id/p2NameView"/>
 
             <TextView
@@ -75,7 +68,7 @@
         android:layout_height="0dp"
         android:id="@+id/playerTurnView"
         android:layout_marginTop="20sp"
-        android:text="Player turn goes hoere"
+        android:text="@string/defaultPlayerTurnGameScreen"
         android:layout_weight="1" />
 
     <RelativeLayout
@@ -87,7 +80,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="The current word is:"
+            android:text="@string/defaultCurrentWordAnnouncerGameScreen"
             android:id="@+id/currentWordAnouncer"/>
 
         <TextView
@@ -104,7 +97,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:layout_marginLeft="3dp"
-            android:text="X"
             android:maxLength="1"
             style="@style/word_text_gamescreen"
             android:id="@+id/playerLetterInputField"

@@ -4,34 +4,59 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.joris_schefold.ghost.SettingsScreen">
+    tools:context="com.joris_schefold.ghost.SettingsActivity">
 
 
-    <Button
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:id="@+id/buttonContainerSettings">
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/clearEverything"
+            android:text="@string/settingsScreenReset"
+            android:onClick="clearHistory"
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="10dp"/>
+
+
+        <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/goBackButton"
-        android:onClick="goBack"
-        android:text="Back"
-        android:layout_below="@+id/goBackButton"/>
+        android:onClick="goBackAndSaveSettings"
+        android:text="@string/backButtonTextSettings"
+        android:layout_below="@+id/goBackButton"
+        android:layout_marginTop="10dp"/>
+
+
+    </LinearLayout>
+
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spinnerContainer"
-        android:layout_below="@+id/goBackButton"
+        android:layout_below="@+id/buttonContainerSettings"
         android:layout_marginTop="30dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Language: "
+            android:text="@string/languageSpinnerAnouncerSettings"
             android:id="@+id/languageAnouncer"/>
 
-            <Spinner
-                style="@style/inputfieldSpinner"
-                android:layout_toRightOf="@+id/languageAnouncer"
-                android:id="@+id/languageSpinner"/>
+
+        <Spinner
+            android:layout_alignParentRight="true"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/languageAnouncer"
+            android:id="@+id/languageSpinner"/>
     </RelativeLayout>
 
 
@@ -45,7 +70,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter name player 1">
+            android:text="@string/enterNameP1">
         </TextView>
 
         <RelativeLayout
@@ -59,7 +84,7 @@
             <EditText
                 style="@style/inputfieldEditText"
                 android:id="@+id/usernameInputP1Settings"
-                android:text="P1"/>
+                android:text="@string/defaultP1Name"/>
 
         </RelativeLayout>
 
@@ -76,7 +101,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter name player 2">
+            android:text="@string/usernameInputP2Startupscreen">
         </TextView>
 
         <RelativeLayout
@@ -90,21 +115,11 @@
             <EditText
                 style="@style/inputfieldEditText"
                 android:id="@+id/usernameInputP2Settings"
-                android:text="P2"/>
+                android:text="@string/defaultNameP2"/>
 
         </RelativeLayout>
 
     </LinearLayout>
-
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/clearEverything"
-        android:layout_below="@+id/inputfield_p2"
-        android:text="Delte usernames \n and highscores"
-        android:onClick="clearSharedPreferences"/>
-
 
 
 </RelativeLayout>
